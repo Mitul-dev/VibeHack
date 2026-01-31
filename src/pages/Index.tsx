@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import HeroSection from "@/components/home/HeroSection";
@@ -7,11 +7,12 @@ import WorkspaceGrid from "@/components/workspace/WorkspaceGrid";
 import WorkspaceDetailModal from "@/components/workspace/WorkspaceDetailModal";
 import PaymentModal from "@/components/booking/PaymentModal";
 import MyBookingsPage from "@/components/booking/MyBookingsPage";
-import { workspaces, Workspace, mockBookings, Booking } from "@/lib/data";
+import { workspaces as defaultWorkspaces, Workspace, mockBookings, Booking } from "@/lib/data";
 
 type View = "home" | "bookings";
 
 const Index = () => {
+  const [workspaces, setWorkspaces] = useState<Workspace[]>(defaultWorkspaces);
   const [currentView, setCurrentView] = useState<View>("home");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
@@ -26,6 +27,18 @@ const Index = () => {
     startTime: string;
     duration: number;
   } | null>(null);
+
+  useEffect(() => {
+    const storedSpaces = localStorage.getItem("listedSpaces");
+    if (storedSpaces) {
+      try {
+        const parsedSpaces = JSON.parse(storedSpaces);
+        setWorkspaces([...defaultWorkspaces, ...parsedSpaces]);
+      } catch (error) {
+        console.error("Error parsing stored spaces:", error);
+      }
+    }
+  }, []);
 
   const filteredWorkspaces = useMemo(() => {
     let filtered = workspaces.filter((workspace) => {

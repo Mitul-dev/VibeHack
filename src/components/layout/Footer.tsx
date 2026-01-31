@@ -63,7 +63,7 @@ const Footer = () => {
                 </a>
               </li>
               <li>
-                <a href="#" className="text-sm text-primary-foreground/70 hover:text-primary-foreground transition-colors">
+                <a href="/list-your-space" className="text-sm text-primary-foreground/70 hover:text-primary-foreground transition-colors">
                   List Your Space
                 </a>
               </li>
